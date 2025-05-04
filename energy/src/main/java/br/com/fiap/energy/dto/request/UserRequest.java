@@ -1,5 +1,6 @@
 package br.com.fiap.energy.dto.request;
 
+import br.com.fiap.energy.entity.UserRole;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -17,7 +18,6 @@ public record UserRequest(
         @Size(min = 6, max = 12, message = "The password must contain between 6 and 12 characteres!")
         String password,
 
-        @NotBlank(message = "The kind is required!")
-        String kind
+        UserRole role
 ) {
 }

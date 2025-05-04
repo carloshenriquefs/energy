@@ -8,6 +8,7 @@ import br.com.fiap.energy.mapper.UserRequestMapper;
 import br.com.fiap.energy.mapper.UserResponseMapper;
 import br.com.fiap.energy.repository.UserRepository;
 import br.com.fiap.energy.service.ServiceAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,7 +33,11 @@ public class UserService implements ServiceAdapter<UserResponse, UserRequest> {
 
     @Override
     public UserResponse save(UserRequest userRequest) {
+
+        String encryptedPassword = new BCryptPasswordEncoder().encode(userRequest.password());
+
         User user = userRequestMapper.userRequestToUser(userRequest);
+        user.setPassword(encryptedPassword);
         user = userRepository.save(user);
 
         return userResponseMapper.userToUserReponse(user);
@@ -44,7 +49,6 @@ public class UserService implements ServiceAdapter<UserResponse, UserRequest> {
                 .map(userResponseMapper::userToUserReponse)
                 .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
     }
-
 
     @Override
     public List<UserResponse> findAll() {
