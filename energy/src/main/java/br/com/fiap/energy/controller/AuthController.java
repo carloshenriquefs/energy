@@ -1,5 +1,6 @@
 package br.com.fiap.energy.controller;
 
+import br.com.fiap.energy.dto.request.LoginRequest;
 import br.com.fiap.energy.dto.request.UserRequest;
 import br.com.fiap.energy.dto.response.UserResponse;
 import br.com.fiap.energy.service.impl.UserService;
@@ -29,11 +30,11 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid UserRequest userRequest) {
+    public ResponseEntity login(@RequestBody @Valid LoginRequest loginRequest) {
         UsernamePasswordAuthenticationToken usernamePassword =
                 new UsernamePasswordAuthenticationToken(
-                        userRequest.email(),
-                        userRequest.password()
+                        loginRequest.email(),
+                        loginRequest.password()
                 );
 
         Authentication auth = authenticationManager.authenticate(usernamePassword);
