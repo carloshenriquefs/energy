@@ -1,6 +1,8 @@
 package br.com.fiap.energy.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -29,6 +31,9 @@ public class User {
     private String email;
     private String password;
     private String kind;
+
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
 
     @OneToMany(mappedBy = "user")
     private List<Residence> residences;
