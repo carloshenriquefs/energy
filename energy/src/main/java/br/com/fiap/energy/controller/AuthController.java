@@ -1,8 +1,11 @@
 package br.com.fiap.energy.controller;
 
+import br.com.fiap.energy.config.security.TokenService;
 import br.com.fiap.energy.dto.request.LoginRequest;
 import br.com.fiap.energy.dto.request.UserRequest;
+import br.com.fiap.energy.dto.response.TokenResponse;
 import br.com.fiap.energy.dto.response.UserResponse;
+import br.com.fiap.energy.entity.User;
 import br.com.fiap.energy.service.impl.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -22,11 +25,14 @@ public class AuthController {
 
     private final AuthenticationManager authenticationManager;
     private final UserService userService;
+    private final TokenService tokenService;
 
     public AuthController(AuthenticationManager authenticationManager,
-                          UserService userService) {
+                          UserService userService,
+                          TokenService tokenService) {
         this.authenticationManager = authenticationManager;
         this.userService = userService;
+        this.tokenService = tokenService;
     }
 
     @PostMapping("/login")
@@ -39,7 +45,9 @@ public class AuthController {
 
         Authentication auth = authenticationManager.authenticate(usernamePassword);
 
-        return ResponseEntity.ok().build();
+        String token = tokenService.generateToken((User) auth.getPrincipal());
+
+        return ResponseEntity.ok(new TokenResponse(token));
     }
 
     @PostMapping("/register")
